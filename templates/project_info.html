@@ -8,10 +8,14 @@
 
   <p>Project Description: {{ description }}</p>
   <p>Best Grade: {{ grade }}</p>
-  <ul>Grades
+  <ul>Grades:
+    {% if grades %}
     {% for grade in grades %}
         <li> Student: <a href="/student?github={{ grade[0] }}">{{ grade[0] }}</a> Grade: {{ grade[1] }} </li>
     {% endfor %}
+    {% else %}
+        <li>No students have completed this project yet.</li>
+    {% endif %}
   </ul>
 </body>
 </html>

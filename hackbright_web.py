@@ -7,6 +7,15 @@ import hackbright
 app = Flask(__name__)
 
 
+@app.route('/')
+def show_projects_students():
+    """Shows list of students and list of projects"""
+
+    students = hackbright.get_all_students()
+    projects = hackbright.get_all_projects()
+    return render_template('homepage.html', students=students, projects=projects)
+
+
 @app.route("/student")
 def get_student():
     """Show information about a student."""
@@ -61,6 +70,25 @@ def show_project_details():
 
     return render_template('project_info.html', title=title, description=description, grade=grade, grades=grades)
 
+
+@app.route("/project-add")
+def add_project():
+    """ Show form for adding new project"""
+
+    return render_template('project_add.html')
+
+
+@app.route('/project-success', methods=["POST"])
+def confirm_project_add():
+    """ Acknowledge new project was added"""
+
+    title = request.form.get('title')
+    description = request.form.get('description')
+    grade = request.form.get('grade')
+
+    hackbright.add_new_project(title, description, grade)
+
+    return render_template("project_success.html", title=title)
 if __name__ == "__main__":
     hackbright.connect_to_db(app)
     app.run(debug=True)
